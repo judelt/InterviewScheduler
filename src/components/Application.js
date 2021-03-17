@@ -21,6 +21,49 @@ const days = [
   },
 ];
 
+const appointments = [
+  {
+    id: 1,
+    time: "12pm",
+  },
+  {
+    id: 2,
+    time: "1pm",
+    interview: {
+      student: "Lydia Miller-Jones",
+      interviewer: {
+        id: 1,
+        name: "Sylvia Palmer",
+        avatar: "https://i.imgur.com/LpaY82x.png",
+      }
+    }
+  },
+  {
+    id: 3,
+    time: "4pm",
+    interview: {
+      student: "Judit Mendez",
+      interviewer: {
+        id: 3,
+        name: "Mildred Nazir",
+        avatar: "https://i.imgur.com/T2WwVfS.png",
+      }
+    }
+  },
+  {
+    id: 2,
+    time: "3pm",
+    interview: {
+      student: "Joe Doe",
+      interviewer: {
+        id: 4,
+        name: "Cohana Roy",
+        avatar: "https://i.imgur.com/FK8V841.jpg",
+      }
+    }
+  }
+];
+
 export default function Application(props) {
   
   const [day, setDay] = useState("Monday");
