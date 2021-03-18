@@ -5,49 +5,7 @@ import "components/Application.scss";
 
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      },
-    },
-  },
-  {
-    id: 3,
-    time: "4pm",
-    interview: {
-      student: "Judit Mendez",
-      interviewer: {
-        id: 3,
-        name: "Mildred Nazir",
-        avatar: "https://i.imgur.com/T2WwVfS.png",
-      },
-    },
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Joe Doe",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg",
-      },
-    },
-  },
-];
+import { getAppointmentsForDay } from "../helpers/selectors"
 
 export default function Application(props) {
   
@@ -56,20 +14,28 @@ export default function Application(props) {
     days: [],
     appointments: {}
   });
-
+  
   const setDay = day => setState({ ...state, day });
-  const setDays = days => setState(prev => ({ ...prev, days }));
 
   useEffect(() => {
-    axios
-      .get("/api/days")
-      .then(response => setDays(response.data));
+    
+      Promise.all([
+        axios.get("/api/days"),
+        axios.get("api/appointments"),
+        axios.get("api/interviewers"),
+      ]).then((all) => {
+        console.log(all)
+        setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data }));
+      });
+      
   }, []);
+  
+  let dailyAppointments = getAppointmentsForDay(state, state.day)
 
-  const appointmentsArr = appointments.map((appointment) => {
+  dailyAppointments = dailyAppointments.map((appointment) => {
     return <Appointment key={appointment.id} {...appointment} />;
   });
-  appointmentsArr.push(<Appointment key="last" time="5pm" />);
+  dailyAppointments.push(<Appointment key="last" time="5pm" />);
 
 
   return (
@@ -90,7 +56,7 @@ export default function Application(props) {
           alt="Lighthouse Labs"
         />
       </section>
-      <section className="schedule">{appointmentsArr}</section>
+      <section className="schedule">{dailyAppointments}</section>
     </main>
   );
 }
