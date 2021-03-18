@@ -7,7 +7,7 @@ export function getAppointmentsForDay (state, day) {
   //get appointments ids
   for (const particularDay of days) {
     if (particularDay.name === day) {
-      appointmentIds = [...particularDay.appointments]
+      appointmentIds = particularDay.appointments
       break;
     }
   }
@@ -23,3 +23,26 @@ export function getAppointmentsForDay (state, day) {
   }
   return result;
 }
+export const getInterview = (state, interview)  => {
+  let result;
+  const interviewers = state.interviewers;
+  if (interview === null) {
+    result = null;
+    return result;
+  } else {
+    for(const key in interviewers){
+      if (interview.interviewer === interviewers[key].id) {
+        result = { 
+          student: interview.student,
+          interviewer: interviewers[key]
+        }
+        break;
+      }
+    }
+  }
+  return result;
+}  
+
+ 
+  
+
