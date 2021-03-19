@@ -2,9 +2,9 @@ export function getAppointmentsForDay (state, day) {
   const dayObject = state.days.find(d => d.name === day)
   if (!dayObject) return [];
 
-  const appointments = dayObject.appointments;
+  const appointments = dayObject.appointments.map(appointmentId => state.appointments[appointmentId]);
     
-  return appointments.map(appointmentId => state.appointments[appointmentId]);
+  return appointments;
 }
   
 export function getInterview (state, interview) {
