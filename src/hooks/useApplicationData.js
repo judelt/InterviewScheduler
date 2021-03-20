@@ -12,8 +12,8 @@ export default function useApplicationData(initial) {
   const setDay = (day) => setState({ ...state, day });
 
   console.log("appointments", state.appointments);
-  console.log("initial days spotsRemaining", state.days);
 
+  //Gets data of days, appointments, interviewers from API
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -29,6 +29,7 @@ export default function useApplicationData(initial) {
     });
   }, []);
 
+  //Calculates remaining spots for a day and returns days array
   const spotsRemaining = function (spotCount) {
     const dayOfWeek = state.days.find(day => day.name === state.day);
     const days = [...state.days];
@@ -41,8 +42,8 @@ export default function useApplicationData(initial) {
     return days;
   };
 
+  //Creates a new appointment and updates spots remaining
   function bookInterview(id, interview) {
-    // console.log(id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -52,8 +53,7 @@ export default function useApplicationData(initial) {
       [id]: appointment,
     };
     const days = spotsRemaining(-1);
-    console.log("days spotsRemaining when book Interview", days);
-      
+
     setState({ ...state, appointments });
 
     return axios.put(`/api/appointments/${id}`, { interview })
@@ -66,19 +66,18 @@ export default function useApplicationData(initial) {
       })
   }
 
+  //Deletes appointment and updates spots remaining
   function deleteAppointment(id) {
     const appointment = {
       ...state.appointments[id],
       interview: null,
     };
 
-    console.log("appointment", appointment);
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
     const days = spotsRemaining(1);
-    console.log("days spotsRemaining when delete", days);
 
     return axios.delete(`/api/appointments/${id}`)
       .then(() => {
