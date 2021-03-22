@@ -13,7 +13,7 @@ export default function useApplicationData(initial) {
 
   console.log("appointments", state.appointments);
 
-  //Gets data of days, appointments, interviewers from API
+  //Gets data of days, appointments, interviewers from API and sets state for those
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
@@ -34,11 +34,10 @@ export default function useApplicationData(initial) {
     const dayOfWeek = state.days.find(day => day.name === state.day);
     const days = [...state.days];
 
-    for (const day of days) {
-      if (day.id === dayOfWeek.id) {
-        day.spots += spotCount;
-      }
-    }
+    days.forEach((day) => {
+      if (day.id === dayOfWeek.id) day.spots += spotCount;
+    });
+   
     return days;
   };
 
