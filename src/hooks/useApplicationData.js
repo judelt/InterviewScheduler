@@ -11,14 +11,12 @@ export default function useApplicationData(initial) {
 
   const setDay = (day) => setState({ ...state, day });
 
-  console.log("appointments", state.appointments);
-
   //Gets data of days, appointments, interviewers from API and sets state for those
   useEffect(() => {
     Promise.all([
       axios.get("/api/days"),
-      axios.get("api/appointments"),
-      axios.get("api/interviewers"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers"),
     ]).then((all) => {
       setState((prev) => ({
         ...prev,
