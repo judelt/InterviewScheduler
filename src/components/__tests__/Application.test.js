@@ -83,11 +83,11 @@ describe("Application", () => {
       queryByText(day, "Monday")
     );
 
-    expect(getByText(day, "2 spots remaining")).toBeInTheDocument(); ///
+    expect(getByText(day, "2 spots remaining")).toBeInTheDocument();
   });
 
   it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -120,7 +120,7 @@ describe("Application", () => {
   it("shows the save error when failing to save an appointment", async () => {
     axios.put.mockRejectedValueOnce();
 
-    const { debug, container } = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -150,7 +150,7 @@ describe("Application", () => {
   it("shows the delete error when failing to delete an existing appointment", async () => {
     axios.delete.mockRejectedValueOnce();
 
-    const { debug, container } = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -172,7 +172,7 @@ describe("Application", () => {
     await waitForElement(() => getByText(appointment, "Error"));
 
     expect(getByText(appointment, "Could not delete")).toBeInTheDocument();
-    
+
     fireEvent.click(getByAltText(appointment, "Close"));
 
     expect(queryByText(appointment, "Archie Cohen"));
