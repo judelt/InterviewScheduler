@@ -37,21 +37,21 @@ export default function useApplicationData(initial) {
       }
     }
     return count;
-  }
+  };
 
   //Updates spots for an specific day
-  const spotsRemaining = function (dayName, days, appointments){
+  const spotsRemaining = function (dayName, days, appointments) {
     const day = days.find((item) => item.name === dayName);
     const remaining = counter(day, appointments);
 
-    const newArr = days.map(item => {
+    const newArr = days.map((item) => {
       if (item.name === dayName) {
-        return {...item, spots: remaining};
+        return { ...item, spots: remaining };
       }
       return item;
     });
     return newArr;
-  }
+  };
 
   //Creates a new appointment and updates spots remaining
   function bookInterview(id, interview) {
@@ -67,14 +67,13 @@ export default function useApplicationData(initial) {
 
     setState({ ...state, appointments });
 
-    return axios.put(`/api/appointments/${id}`, { interview })
-      .then(() => {
-        setState((prevState) => ({
-          ...prevState,
-          appointments,
-          days
-        }));
-      })
+    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
+      setState((prevState) => ({
+        ...prevState,
+        appointments,
+        days,
+      }));
+    });
   }
 
   //Deletes appointment and updates spots remaining
@@ -90,14 +89,13 @@ export default function useApplicationData(initial) {
     };
     const days = spotsRemaining(state.day, state.days, appointments);
 
-    return axios.delete(`/api/appointments/${id}`)
-      .then(() => {
-        setState((prevState) => ({
-          ...prevState,
-          appointments,
-          days
-        }));
-      })
+    return axios.delete(`/api/appointments/${id}`).then(() => {
+      setState((prevState) => ({
+        ...prevState,
+        appointments,
+        days,
+      }));
+    });
   }
 
   return { state, setDay, bookInterview, deleteAppointment };
