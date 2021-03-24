@@ -38,8 +38,6 @@ export default function Appointment(props) {
       .bookInterview(props.id, interview)
       .then(() => transition(SHOW))
       .catch((error) => transition(ERROR_SAVE, true));
-
-    console.log("appt props", props);
   }
 
   function deleting() {
@@ -49,13 +47,11 @@ export default function Appointment(props) {
       .deleteAppointment(props.id)
       .then(() => transition(EMPTY))
       .catch((err) => transition(ERROR_DELETE, true));
-
-    console.log("appt props", props);
   }
 
   return (
     <>
-      <article className="appointment">
+      <article className="appointment" data-testid="appointment">
         <Header time={props.time} />
         {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
         {mode === SHOW && (
@@ -76,7 +72,6 @@ export default function Appointment(props) {
         {mode === EDIT && (
           <Form
             name={props.interview.student}
-            // student name and the list of interviewers with the prop values
             interviewers={props.interviewers}
             interviewer={props.interview.interviewer.id}
             onCancel={() => back()}
@@ -92,15 +87,13 @@ export default function Appointment(props) {
             onConfirm={deleting}
           />
         )}
-        {mode === ERROR_SAVE && <Error
-          message="Could not save"
-          onClose={() => back()}
-        />}
+        {mode === ERROR_SAVE && (
+          <Error message="Could not save" onClose={() => back()} />
+        )}
 
-        {mode === ERROR_DELETE && <Error
-          message="Could not delete"
-          onClose={() => back()}
-        />}
+        {mode === ERROR_DELETE && (
+          <Error message="Could not delete" onClose={() => back()} />
+        )}
       </article>
     </>
   );
