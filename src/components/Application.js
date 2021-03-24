@@ -4,34 +4,38 @@ import "components/Application.scss";
 
 import DayList from "./DayList";
 import Appointment from "./Appointment";
-import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors"
-import useApplicationData from "../hooks/useApplicationData"
+import {
+  getAppointmentsForDay,
+  getInterview,
+  getInterviewersForDay,
+} from "../helpers/selectors";
+import useApplicationData from "../hooks/useApplicationData";
 
 export default function Application(props) {
-
   const {
     state,
     setDay,
     bookInterview,
-    deleteAppointment
+    deleteAppointment,
   } = useApplicationData();
-  
+
   const interviewers = getInterviewersForDay(state, state.day);
-  const dailyAppointments = getAppointmentsForDay(state, state.day)
-  
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
+
   const schedule = dailyAppointments.map((appointment) => {
-    // console.log(interview)
-    return <Appointment
-      key={appointment.id}
-      id={appointment.id}
-      time={appointment.time}
-      interview={getInterview(state, appointment.interview)}
-      interviewers={interviewers}
-      bookInterview={bookInterview}
-      deleteAppointment={deleteAppointment}
-    />;
+    return (
+      <Appointment
+        key={appointment.id}
+        id={appointment.id}
+        time={appointment.time}
+        interview={getInterview(state, appointment.interview)}
+        interviewers={interviewers}
+        bookInterview={bookInterview}
+        deleteAppointment={deleteAppointment}
+      />
+    );
   });
-  
+
   return (
     <main className="layout">
       <section className="sidebar">
