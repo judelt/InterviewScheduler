@@ -27,17 +27,31 @@ export default function useApplicationData(initial) {
     });
   }, []);
 
-  //Calculates remaining spots for a day and returns days array
-  const spotsRemaining = function (spotCount) {
-    const dayOfWeek = state.days.find(day => day.name === state.day);
-    const days = [...state.days];
+  //Counts spots available for an specific day
+  const counter = (dayObj, appointments) => {
+    let count = 0;
+    for (const id of dayObj.appointments) {
+      const appointment = appointments[id];
+      if (!appointment.interview) {
+        count++;
+      }
+    }
+    return count;
+  }
 
-    days.forEach((day) => {
-      if (day.id === dayOfWeek.id) day.spots += spotCount;
+  //Updates spots for an specific day
+  const spotsRemaining = function (dayName, days, appointments){
+    const day = days.find((item) => item.name === dayName);
+    const remaining = counter(day, appointments);
+
+    const newArr = days.map(item => {
+      if (item.name === dayName) {
+        return {...item, spots: remaining};
+      }
+      return item;
     });
-   
-    return days;
-  };
+    return newArr;
+  }
 
   //Creates a new appointment and updates spots remaining
   function bookInterview(id, interview) {
@@ -49,7 +63,7 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = spotsRemaining(-1);
+    const days = spotsRemaining(state.day, state.days, appointments);
 
     setState({ ...state, appointments });
 
@@ -74,7 +88,7 @@ export default function useApplicationData(initial) {
       ...state.appointments,
       [id]: appointment,
     };
-    const days = spotsRemaining(1);
+    const days = spotsRemaining(state.day, state.days, appointments);
 
     return axios.delete(`/api/appointments/${id}`)
       .then(() => {
