@@ -1,3 +1,4 @@
+//returns appointments for an specific day
 export function getAppointmentsForDay(state, day) {
   const dayObject = state.days.find((d) => d.name === day);
   if (!dayObject) return [];
@@ -8,7 +9,7 @@ export function getAppointmentsForDay(state, day) {
 
   return appointments;
 }
-
+//returns object with the student and interviewer for an specific inteview
 export function getInterview(state, interview) {
   let result;
   if (!interview) return null;
@@ -25,7 +26,7 @@ export function getInterview(state, interview) {
   }
   return result;
 }
-
+//returns interviewers for an specific day
 export function getInterviewersForDay(state, day) {
   const dayObject = state.days.find((d) => d.name === day);
   if (!dayObject) return [];
