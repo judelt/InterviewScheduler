@@ -27,22 +27,7 @@ Assignment for [Lighthouse Labs.](https://www.lighthouselabs.ca/)<br /><br />
 
 ### **Setup**
 
-Install dependencies with `npm install`.
-
-### **Running Webpack Development Server**
-
-```sh
-npm start
-```
-
-### **Running Jest Test Framework**
-
-```sh
-npm test
-```
-
-### **Running Storybook Visual Testbed**
-
-```sh
-npm run storybook
-```
+Fork and clone this repository.<br />
+Install dependencies with `npm install`.<br />
+Fork and clone [the API server](https://github.com/lighthouse-labs/scheduler-api) and follow the instructions on the README file to set up the local database and run it.<br />
+Run the Webpack Development Server with `npm start`.<br />
