@@ -27,7 +27,16 @@ Assignment for [Lighthouse Labs.](https://www.lighthouselabs.ca/)<br /><br />
 
 ### **Setup**
 
-Fork and clone this repository.<br />
-Install dependencies with `npm install`.<br />
-Fork and clone [the API server](https://github.com/lighthouse-labs/scheduler-api) and follow the instructions on the README file to set up the local database and run it.<br />
-Run the Webpack Development Server with `npm start`.<br />
+1. Fork and clone this repository.<br />
+2. Install dependencies with `npm install`.<br />
+3. Fork and clone [the API server](https://github.com/lighthouse-labs/scheduler-api) and follow the instructions on the README file to set up the local database and run it.<br />
+4. Run the Webpack Development Server with `npm start`.<br />
+
+### **Dependencies**
+
+- Axios
+- Classnames
+- Normalize.css
+- React
+- React-dom
+- React-scrips
