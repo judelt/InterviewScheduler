@@ -1,15 +1,55 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 
-export default function useApplicationData(initial) {
-  const [state, setState] = useState({
+const SET_DAY = "SET_DAY";
+const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
+const SET_INTERVIEW = "SET_INTERVIEW";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case SET_DAY:
+      return {
+        ...state,
+        day: action.day,
+      };
+    case SET_APPLICATION_DATA:
+      return {
+        ...state,
+        days: action.days,
+        appointments: action.appointments,
+        interviewers: action.interviewers,
+      };
+    case SET_INTERVIEW:
+      const appointment = {
+        ...state.appointments[action.id],
+        interview: action.interview ? { ...action.interview } : null,
+      };
+
+      const appointments = {
+        ...state.appointments,
+        [action.id]: appointment,
+      };
+
+      const days = spotsRemaining(state.day, state.days, appointments);
+
+      return { ...state, appointments, days };
+
+    default:
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      );
+  }
+}
+
+export default function useApplicationData() {
+  const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
     appointments: {},
     interviewers: {},
   });
 
-  const setDay = (day) => setState({ ...state, day });
+  const setDay = (day) => dispatch({ type: SET_DAY, day });
 
   //Gets data of days, appointments, interviewers from API and sets state for those
   useEffect(() => {
@@ -18,12 +58,12 @@ export default function useApplicationData(initial) {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers"),
     ]).then((all) => {
-      setState((prev) => ({
-        ...prev,
+      dispatch({
+        type: SET_APPLICATION_DATA,
         days: all[0].data,
         appointments: all[1].data,
         interviewers: all[2].data,
-      }));
+      });
     });
   }, []);
 
@@ -67,34 +107,17 @@ export default function useApplicationData(initial) {
 
     setState({ ...state, appointments });
 
-    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
-      setState((prevState) => ({
-        ...prevState,
-        appointments,
-        days,
-      }));
-    });
+    return axios
+      .put(`/api/appointments/${id}`, appointment)
+      .then((response) => {
+        dispatch({ type: SET_INTERVIEW, id, interview });
+      });
   }
 
   //Deletes appointment and updates spots remaining
   function deleteAppointment(id) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: null,
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    const days = spotsRemaining(state.day, state.days, appointments);
-
-    return axios.delete(`/api/appointments/${id}`).then(() => {
-      setState((prevState) => ({
-        ...prevState,
-        appointments,
-        days,
-      }));
+    return axios.delete(`/api/appointments/${id}`).then((response) => {
+      dispatch({ type: SET_INTERVIEW, id, interview: null });
     });
   }
 
