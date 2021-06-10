@@ -99,12 +99,20 @@ export default function useApplicationData() {
     });
   }, []);
 
+  
   useEffect(() => {
     let ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
-    ws.onopen = () => console.log('opened websocket connection');
-    ws.onclose = () => console.log('ws closed');
+    ws.onopen = () => ws.send('websocket connection open')
+    
     ws.onmessage = e => {
       const message = JSON.parse(e.data);
+      if (message.type === "SET_INTERVIEW") {
+        dispatch({
+          type: SET_INTERVIEW,
+          id: message.id,
+          interview: message.interview,
+        });
+      }
       console.log('e', message);
     };
     return () => {
