@@ -1,6 +1,26 @@
 import axios from "axios";
 import { useReducer, useEffect } from "react";
 
+//Updates spots for an specific day
+const spotsRemaining = function (dayName, days, appointments) {
+  const spots = days
+    .find((day) => day.name === dayName)
+    .appointments.reduce(
+      (spots, appointmentID) =>
+        !appointments[appointmentID].interview ? ++spots : spots,
+      0
+    );
+
+  const newArr = days.map((day) => {
+    if (day.name === dayName) {
+      return { ...day, spots };
+    }
+    return day;
+  });
+
+  return newArr;
+};
+
 const SET_DAY = "SET_DAY";
 const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
 const SET_INTERVIEW = "SET_INTERVIEW";
@@ -41,13 +61,15 @@ function reducer(state, action) {
   }
 }
 
+const initialState = {
+  day: "Monday",
+  days: [],
+  appointments: {},
+  interviewers: {},
+};
+
 export default function useApplicationData() {
-  const [state, dispatch] = useReducer(reducer, {
-    day: "Monday",
-    days: [],
-    appointments: {},
-    interviewers: {},
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
@@ -67,45 +89,12 @@ export default function useApplicationData() {
     });
   }, []);
 
-  //Counts spots available for an specific day
-  const counter = (dayObj, appointments) => {
-    let count = 0;
-    for (const id of dayObj.appointments) {
-      const appointment = appointments[id];
-      if (!appointment.interview) {
-        count++;
-      }
-    }
-    return count;
-  };
-
-  //Updates spots for an specific day
-  const spotsRemaining = function (dayName, days, appointments) {
-    const day = days.find((item) => item.name === dayName);
-    const remaining = counter(day, appointments);
-
-    const newArr = days.map((item) => {
-      if (item.name === dayName) {
-        return { ...item, spots: remaining };
-      }
-      return item;
-    });
-    return newArr;
-  };
-
   //Creates a new appointment and updates spots remaining
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
     };
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    const days = spotsRemaining(state.day, state.days, appointments);
-
-    setState({ ...state, appointments });
 
     return axios
       .put(`/api/appointments/${id}`, appointment)
