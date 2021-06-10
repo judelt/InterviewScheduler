@@ -73,6 +73,16 @@ export default function useApplicationData() {
 
   const setDay = (day) => dispatch({ type: SET_DAY, day });
 
+  
+
+  // exampleSocket.onmessage = function (event) {
+  //   console.log(event.data);
+  // }
+  // if (webSocket.bufferedAmount === 0) {
+    // exampleSocket.close();
+  // }
+  
+
   //Gets data of days, appointments, interviewers from API and sets state for those
   useEffect(() => {
     Promise.all([
@@ -88,6 +98,20 @@ export default function useApplicationData() {
       });
     });
   }, []);
+
+  useEffect(() => {
+    let ws = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+    ws.onopen = () => console.log('opened websocket connection');
+    ws.onclose = () => console.log('ws closed');
+    ws.onmessage = e => {
+      const message = JSON.parse(e.data);
+      console.log('e', message);
+    };
+    return () => {
+      ws.close();
+    }
+
+  }, [])
 
   //Creates a new appointment and updates spots remaining
   function bookInterview(id, interview) {
