@@ -113,12 +113,7 @@ export default function useApplicationData() {
           interview: message.interview,
         });
       }
-      console.log('e', message);
     };
-    return () => {
-      ws.close();
-    }
-
   }, [])
 
   //Creates a new appointment and updates spots remaining
