@@ -17,7 +17,7 @@ export default function useVisualMode(initial) {
 
     setHistory((prev) => {
       const prevHistory = [...prev];
-      prevHistory.pop();
+      prevHistory.slice(0, -1);
       return prevHistory;
     });
   }
