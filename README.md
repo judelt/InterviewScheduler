@@ -1,8 +1,7 @@
 # **Interview Scheduler**
 React application that allows users to book and cancel interviews.<br />
-Assignment for [Lighthouse Labs.](https://www.lighthouselabs.ca/)<br /><br />
-
-
+Assignment for [Lighthouse Labs.](https://www.lighthouselabs.ca/)<br />
+You can try the app [here.](https://frosty-varahamihira-3f7f04.netlify.app/)<br /><br />
 
 ### **Some of the application functionality**<br />
 
