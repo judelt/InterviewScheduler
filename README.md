@@ -1,7 +1,7 @@
 # **Interview Scheduler**
 React application that allows users to book and cancel interviews. It uses WebSockets in the API server for real-time communication and CirlceCI for a continuous integration process.<br />
 Assignment for [Lighthouse Labs.](https://www.lighthouselabs.ca/)<br />
-You can try the app [here.](https://frosty-varahamihira-3f7f04.netlify.app/)<br /><br />
+You can try the app [here.](https://lucid-payne-0568a7.netlify.app/)<br /><br />
 
 ### **Some of the application functionality**<br />
 
